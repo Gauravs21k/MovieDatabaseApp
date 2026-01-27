@@ -9,14 +9,18 @@ import kotlinx.coroutines.flow.Flow
 interface MovieDao {
 
     @Query("""
-        SELECT * FROM movies
-        WHERE id IN (SELECT movieId FROM movie_types WHERE type = :type)
+        SELECT m.* FROM movies m
+        INNER JOIN movie_types mt ON m.id = mt.movieId
+        WHERE mt.type = :type
+        ORDER BY mt.page ASC, mt.positionInPage ASC
     """)
     fun getMoviesByType(type: String): Flow<List<Movie>>
 
     @Query("""
-        SELECT * FROM movies
-        WHERE id IN (SELECT movieId FROM movie_types WHERE type = :type)
+        SELECT m.* FROM movies m
+        INNER JOIN movie_types mt ON m.id = mt.movieId
+        WHERE mt.type = :type
+        ORDER BY mt.page ASC, mt.positionInPage ASC
     """)
     suspend fun getMoviesByTypeSingle(type: String): List<Movie>
 
@@ -46,9 +50,12 @@ interface MovieDao {
     suspend fun clearMovieTypesByType(type: String)
 
     @Transaction
-    suspend fun insertMoviesWithType(movies: List<Movie>, type: String) {
+    suspend fun insertMoviesWithType(movies: List<Movie>, type: String, page: Int = 1) {
         upsertMovies(movies)
-        insertMovieTypes(movies.map { MovieType(it.id, type) })
+        val movieTypes = movies.mapIndexed { index, movie ->
+            MovieType(movie.id, type, page, index)
+        }
+        insertMovieTypes(movieTypes)
     }
 
     @Transaction

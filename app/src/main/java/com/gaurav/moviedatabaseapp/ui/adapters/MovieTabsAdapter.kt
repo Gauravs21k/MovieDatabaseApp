@@ -24,7 +24,7 @@ class MovieTabsAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapte
         return when (position) {
             0 -> "Trending"
             1 -> "Now Playing"
-            2 -> "Bookmarked"
+            2 -> "Saved"
             else -> ""
         }
     }

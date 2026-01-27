@@ -28,7 +28,8 @@ class AppModule(private val application: Application) {
             application,
             AppDatabase::class.java,
             "movies_db"
-        ).build()
+        ).addMigrations(AppDatabase.MIGRATION_1_2)
+         .build()
     }
 
     @Provides

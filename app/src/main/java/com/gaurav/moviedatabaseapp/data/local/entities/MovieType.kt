@@ -17,5 +17,7 @@ import androidx.room.ForeignKey
 )
 data class MovieType(
     val movieId: Int,
-    val type: String // trending, now_playing, search
+    val type: String,
+    val page: Int,
+    val positionInPage: Int
 )

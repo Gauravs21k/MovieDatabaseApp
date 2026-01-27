@@ -48,7 +48,7 @@ class MovieRepository @Inject constructor(
                 else -> return Result.failure(IllegalArgumentException("Unknown movie type: $type"))
             }
 
-            appendMoviesOfType(response.results, type)
+            appendMoviesOfType(response.results, type, page)
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
@@ -105,10 +105,10 @@ class MovieRepository @Inject constructor(
 
     private suspend fun updateMoviesOfType(movies: List<Movie>, type: String) {
         movieDao.clearNonBookmarkedMoviesByType(type)
-        movieDao.insertMoviesWithType(movies, type)
+        movieDao.insertMoviesWithType(movies, type, 1)
     }
 
-    private suspend fun appendMoviesOfType(movies: List<Movie>, type: String) {
-        movieDao.insertMoviesWithType(movies, type)
+    private suspend fun appendMoviesOfType(movies: List<Movie>, type: String, page: Int) {
+        movieDao.insertMoviesWithType(movies, type, page)
     }
 }
