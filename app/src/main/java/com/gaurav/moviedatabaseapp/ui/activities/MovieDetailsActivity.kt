@@ -3,7 +3,10 @@ package com.gaurav.moviedatabaseapp.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.gaurav.moviedatabaseapp.MovieApplication
@@ -29,6 +32,7 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         (application as MovieApplication).appComponent.inject(this)
         binding = ActivityMovieDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -80,7 +84,7 @@ class MovieDetailsActivity : AppCompatActivity() {
     }
 
     private fun updateBookmarkButton(isBookmarked: Boolean) {
-        binding.btnBookmark.text = if (isBookmarked) "Remove Bookmark" else "Add Bookmark"
+        binding.btnBookmark.text = if (isBookmarked) "UNSAVE" else "SAVE"
     }
 
     private fun toggleBookmark() {
@@ -90,7 +94,7 @@ class MovieDetailsActivity : AppCompatActivity() {
             currentMovie = movie.copy(isBookmarked = newBookmarkStatus)
             updateBookmarkButton(newBookmarkStatus)
 
-            val message = if (newBookmarkStatus) "Movie bookmarked!" else "Bookmark removed!"
+            val message = if (newBookmarkStatus) "Movie saved!" else "Movie removed!"
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
             val resultIntent = Intent().apply {
